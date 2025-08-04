@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 
-export const createExportsDir = async (): Promise<string | undefined> => {
+const createExportsDir = async (): Promise<string | undefined> => {
   try {
     const exportDirectoryPath = path.join(__dirname, "..", "exports");
     const exportFolderExists = await fs
@@ -24,12 +24,18 @@ export const createExportsDir = async (): Promise<string | undefined> => {
 export const savePokemonMarkdown = async (
   pokemonName: string,
   pokemonId: number,
-  pokemonMarkdown: string,
-  exportsDir: string
+  pokemonMarkdown: string
 ) => {
   try {
+    const exportDirectory = await createExportsDir();
+
+    if (!exportDirectory) {
+      console.error("Export directory not found or could not be created.");
+      return;
+    }
+
     const filePath = path.join(
-      exportsDir,
+      exportDirectory,
       `(${pokemonId}) - ${pokemonName}.md`
     );
 

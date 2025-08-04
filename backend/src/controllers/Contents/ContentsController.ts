@@ -35,16 +35,10 @@ ContentController.get("/:pokemonId", async (_req: Request, res: Response) => {
 
   try {
     const pokemon = await getPokemonById(Number(pokemonId));
-    const exportDirectory = await createExportsDir();
-
-    if (!exportDirectory) {
-      return res.status(500).send("Failed to create export directory");
-    }
-
     const pokemonMarkdown = pokemonJsonToMd(pokemon);
     const { name, pokedexId } = pokemon;
 
-    savePokemonMarkdown(name, pokedexId, pokemonMarkdown, exportDirectory);
+    savePokemonMarkdown(name, pokedexId, pokemonMarkdown);
     return res.status(200).send({
       message: `Pokemon ${name} saved successfully`,
     });
