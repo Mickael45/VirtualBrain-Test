@@ -63,10 +63,8 @@ export type StatBlockView = Omit<
   "special_attack" | "special_defense"
 >;
 
-export type PokemonTypeView = Omit<PokemonType, "image" | "slug">;
-
 export type PokemonView = Pick<Pokemon, "id" | "name" | "image"> & {
   stats: StatBlockView;
-  types: PokemonTypeView[];
+  types: string[];
   evolvesFrom: Evolution | null;
 };
