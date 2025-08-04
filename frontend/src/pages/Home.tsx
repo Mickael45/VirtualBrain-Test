@@ -1,48 +1,90 @@
+import ErrorFallback from "@/components/ErrorMessage";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import PokemonTypeFilter from "@/components/PokemonTypeFilter";
 import PokemonVirtualList from "@/components/PokemonVirtualList";
 import { API_URL } from "@/constants";
-import { useQueries } from "@tanstack/react-query";
-import type { PokemonView } from "types";
+import { useSuspenseQueries } from "@tanstack/react-query";
+import { Suspense, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import type { PokemonTypeView, PokemonView } from "types";
 
 interface PokemonResponse {
   pokemons: PokemonView[];
 }
 
+interface TypesResponse {
+  types: PokemonTypeView[];
+}
+
 const fetchPokemons = async (): Promise<PokemonResponse> => {
   const response = await fetch(`${API_URL}pokemons/all`);
+
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new Error("Something went wrong while fetching pokemons");
   }
+
   return response.json();
 };
 
-const Home = () => {
-  const results = useQueries({
+const fetchTypes = async (): Promise<TypesResponse> => {
+  const response = await fetch(`${API_URL}pokemons/types`);
+
+  if (!response.ok) {
+    throw new Error("Something went wrong while fetching types");
+  }
+
+  return response.json();
+};
+
+const PokemonList = () => {
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [pokemonResults, typesResults] = useSuspenseQueries({
     queries: [
       {
-    queryKey: ["pokemons"],
-        queryFn: () => fetchPokemons().then((data) => data.pokemons),
+        queryKey: ["pokemons"],
+        queryFn: (): Promise<PokemonView[]> =>
+          fetchPokemons().then((data) => data.pokemons),
       },
-    ],
+      {
+        queryKey: ["types"],
+        queryFn: (): Promise<PokemonTypeView[]> =>
+          fetchTypes().then((data) => data.types),
+      },
+    ] as const,
   });
 
-  if (results.some((query) => query.isLoading)) {
-    return "Loading...";
-  }
+  const toggleType = (typeName: string) =>
+    setSelectedTypes((prevSelected) =>
+      prevSelected.includes(typeName)
+        ? prevSelected.filter((type) => type !== typeName)
+        : [...prevSelected, typeName]
+    );
 
-  if (results.some((query) => query.isError)) {
-    return <div>An error occurred while fetching the pokemons data.</div>;
-  }
-
-  const [pokemonsResult] = results;
-
-  if (!pokemonsResult || !pokemonsResult.data) {
-    return <div>No pokemons found.</div>;
-  }
+  const filteredPokemons = pokemonResults.data.filter(
+    (pokemon) =>
+      selectedTypes.length === 0 ||
+      pokemon.types.some((type) => selectedTypes.includes(type))
+  );
 
   return (
     <div>
-      <PokemonVirtualList pokemons={pokemonsResult.data} />
+      <PokemonTypeFilter
+        types={typesResults.data}
+        selectedTypes={selectedTypes}
+        onClick={toggleType}
+      />
+      <PokemonVirtualList pokemons={filteredPokemons} />
     </div>
+  );
+};
+
+const Home = () => {
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Suspense fallback={<LoadingSpinner />}>
+        <PokemonList />
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 

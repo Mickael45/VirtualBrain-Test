@@ -68,3 +68,12 @@ export type PokemonView = Pick<Pokemon, "id" | "name" | "image"> & {
   types: string[];
   evolvesFrom: Evolution | null;
 };
+
+export interface ApiPokemonType {
+  id: string;
+  name: string;
+  image: string;
+  englishName: string;
+}
+
+export type PokemonTypeView = Omit<ApiPokemonType, "englishName">;

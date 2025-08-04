@@ -1,6 +1,6 @@
 import axios from "axios";
 import { POKEMON_API_URL } from "../constants";
-import { Pokemon, PokemonType } from "types";
+import { ApiPokemonType, Pokemon } from "types";
 
 export const getPokemonById = async (id: number): Promise<Pokemon> => {
   try {
@@ -10,7 +10,7 @@ export const getPokemonById = async (id: number): Promise<Pokemon> => {
       throw new Error(`Failed to fetch Pokemon with ID ${id}`);
     }
 
-    return response.data as Pokemon;
+    return response.data;
   } catch (error) {
     console.error(`Error fetching Pokemon with ID ${id}:`, error);
     throw new Error("Failed to fetch Pokemon data");
@@ -25,14 +25,14 @@ export const getAllPokemons = async (): Promise<Pokemon[]> => {
       throw new Error("Failed to fetch Pokemons");
     }
 
-    return response.data as Pokemon[];
+    return response.data;
   } catch (error) {
     console.error("Error fetching Pokemons:", error);
     throw new Error("Failed to fetch Pokemons data");
   }
 };
 
-export const getPokemonTypes = async (): Promise<PokemonType[]> => {
+export const getPokemonTypes = async (): Promise<ApiPokemonType[]> => {
   try {
     const response = await axios.get(`${POKEMON_API_URL}/types`);
 
@@ -40,7 +40,7 @@ export const getPokemonTypes = async (): Promise<PokemonType[]> => {
       throw new Error("Failed to fetch Pokemon types");
     }
 
-    return response.data as PokemonType[];
+    return response.data;
   } catch (error) {
     console.error("Error fetching Pokemon types:", error);
     throw new Error("Failed to fetch Pokemon types data");

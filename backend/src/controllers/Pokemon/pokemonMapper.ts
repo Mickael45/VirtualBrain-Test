@@ -1,6 +1,8 @@
 import {
+  ApiPokemonType,
   Evolution,
   Pokemon,
+  PokemonTypeView,
   PokemonView,
   PreEvolution,
   StatBlockView,
@@ -38,4 +40,10 @@ export const toPokemonView = (pokemon: Pokemon): PokemonView => ({
   stats: toStatBlockView(pokemon.stats),
   types: toTypesView(pokemon.apiTypes),
   evolvesFrom: toEvolutionView(pokemon.apiPreEvolution),
+});
+
+export const toPokemonTypeView = (type: ApiPokemonType): PokemonTypeView => ({
+  id: type.id,
+  name: type.name,
+  image: type.image,
 });
