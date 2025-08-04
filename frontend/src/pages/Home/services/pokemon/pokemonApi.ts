@@ -1,5 +1,6 @@
 import { API_URL } from "@/constants";
 import type { PokemonTypeView, PokemonView } from "types";
+import { isPokemonView } from "./schema";
 
 interface PokemonResponse {
   pokemons: PokemonView[];
@@ -17,7 +18,17 @@ export const fetchPokemons = async (): Promise<PokemonResponse> => {
       throw new Error("Something went wrong while fetching pokemons");
     }
 
-    return response.json();
+    const data = await response.json();
+
+    if (
+      !data ||
+      !Array.isArray(data.pokemons) ||
+      !data.pokemons.every(isPokemonView)
+    ) {
+      throw new Error("Invalid response format for pokemons");
+    }
+
+    return data;
   } catch (error) {
     console.error("Error fetching pokemons:", error);
     return { pokemons: [] };
@@ -32,7 +43,17 @@ export const fetchTypes = async (): Promise<TypesResponse> => {
       throw new Error("Something went wrong while fetching types");
     }
 
-    return response.json();
+    const data = await response.json();
+
+    if (
+      !data ||
+      !Array.isArray(data.types) ||
+      !data.types.every((type: unknown) => typeof type === "string")
+    ) {
+      throw new Error("Invalid response format for types");
+    }
+
+    return data;
   } catch (error) {
     console.error("Error fetching types:", error);
     return { types: [] };
