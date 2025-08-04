@@ -6,7 +6,7 @@ interface HeaderProps {
 }
 
 const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => (
-  <header className="bg-gray-700/40 py-4 mb-4">
+  <header className="bg-gray-700/40 py-4 mb-4 w-full">
     <div className="w-7xl mx-auto">
       <img src={logo} alt="Logo" className="h-12 mx-auto" />
       <div className="flex justify-center mt-4">

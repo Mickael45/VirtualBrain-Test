@@ -39,9 +39,9 @@ const HomeContent = () => {
   );
 
   return (
-    <>
+    <div className="h-screen flex flex-col w-full items-start">
       <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <div className="h-screen flex flex-col items-center">
+      <div className="flex h-9/10 flex-col w-full items-center">
         <PokemonTypeFilter
           types={types}
           selectedTypes={selectedTypes}
@@ -71,7 +71,7 @@ const HomeContent = () => {
           selectedPokemons={selectedPokemons}
         />
       </div>
-    </>
+    </div>
   );
 };
 

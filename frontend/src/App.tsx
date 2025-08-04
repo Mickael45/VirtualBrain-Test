@@ -13,7 +13,7 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <div className="min-h-screen grid items-center  bg-gradient-to-br from-gray-900 via-slate-800 to-zinc-900">
+    <div className="min-h-screen grid items-center bg-gradient-to-br from-gray-900 via-slate-800 to-zinc-900">
       <QueryClientProvider client={queryClient}>
         <Home />
       </QueryClientProvider>
