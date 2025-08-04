@@ -32,6 +32,9 @@ importers:
       ts-pattern:
         specifier: ^5.6.0
         version: 5.8.0
+      types:
+        specifier: link:../types
+        version: link:../types
       use-immer:
         specifier: ^0.11.0
         version: 0.11.0(immer@10.1.1)(react@18.3.1)
