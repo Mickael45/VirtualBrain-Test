@@ -1,5 +1,8 @@
 import { type Request, type Response, Router } from "express";
-import { getAllPokemons, getPokemonById } from "../services/pokemonApiService";
+import {
+  getAllPokemons,
+  getPokemonById,
+} from "../../services/pokemonApiService";
 import { Pokemon } from "types";
 
 const PokemonController = Router();
