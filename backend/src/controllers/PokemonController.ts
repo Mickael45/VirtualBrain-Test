@@ -5,15 +5,27 @@ import { Pokemon } from "../types/Pokemon";
 
 const PokemonController = Router();
 
-PokemonController.get("/:id", async (req: Request, res: Response) => {
-  const { id } = req.params;
+PokemonController.get("/:pokemonId", async (_req: Request, res: Response) => {
+  const { pokemonId } = _req.params;
 
-  console.log("coucou");
-  const result = await axios.get(`${POKEMON_API_URL}/pokemon/${id}`);
+  if (!pokemonId) {
+    return res.status(400).send("Pokemon ID is required");
+  }
 
-  const pokemon = result.data as Pokemon;
+  const id = Number(pokemonId);
+
+  if (isNaN(id) || id <= 0 || id > 898) {
+    return res.status(400).send("Invalid Pokemon ID");
+  }
+
+  try {
+    const pokemon = (await getPokemonById(id)) as Pokemon;
 
   return res.status(200).send({ pokemon });
+  } catch (error) {
+    console.error("Error getting Pokemon with ID:", id, error);
+    return res.status(500).send("Failed to get Pokemon by ID");
+  }
 });
 
 export { PokemonController };
