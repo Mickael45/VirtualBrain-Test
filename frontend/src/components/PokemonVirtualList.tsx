@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import PokemonCard from "./PokemonCard";
+import PokemonCard from "./PokemonCard/PokemonCard";
 import type { PokemonView } from "types";
-import { useResponsiveColumns } from "@/hooks/useResponsiveColumns";
+import { useResponsiveColumns } from "@/pages/Home/hooks/useResponsiveColumns";
 
 interface PokemonVirtualListProps {
   pokemons: PokemonView[];
@@ -26,7 +26,7 @@ const PokemonVirtualList = ({
   });
 
   return (
-    <div ref={parentRef} className="h-screen w-full overflow-y-auto">
+    <div ref={parentRef} className="h-9/10 w-full overflow-y-auto">
       <div
         className={`relative max-w-7xl mx-auto h-[${rowVirtualizer.getTotalSize()}px]`}
       >

@@ -1,4 +1,4 @@
-import { typeToColorMapper } from "@/utils/typeToColorMapper";
+import { typeToColorMapper } from "@/pages/Home/utils/typeToColorMapper";
 
 interface PokemonTypeFilterProps {
   types: string[];

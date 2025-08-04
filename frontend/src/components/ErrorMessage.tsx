@@ -1,5 +1,5 @@
-const ErrorFallback = ({ error }: { error: Error }) => (
-  <div>An error occurred: {error.message}</div>
+const ErrorMessage = ({ error }: { error: Error }) => (
+  <div className="text-white">An error occurred: {error.message}</div>
 );
 
-export default ErrorFallback;
+export default ErrorMessage;
