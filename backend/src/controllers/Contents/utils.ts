@@ -3,11 +3,19 @@ import path from "path";
 
 export const createExportsDir = async (): Promise<string | undefined> => {
   try {
-    const exportsDir = path.join(__dirname, "..", "exports");
+    const exportDirectoryPath = path.join(__dirname, "..", "exports");
+    const exportFolderExists = await fs
+      .access(exportDirectoryPath)
+      .then(() => true)
+      .catch(() => false);
 
-    await fs.mkdir(exportsDir);
+    if (exportFolderExists) {
+      return exportDirectoryPath;
+    }
 
-    return exportsDir;
+    await fs.mkdir(exportDirectoryPath);
+
+    return exportDirectoryPath;
   } catch (error) {
     console.error("Error creating exports directory:", error);
   }
