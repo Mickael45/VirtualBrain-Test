@@ -1,18 +1,19 @@
 import ErrorFallback from "@/components/ErrorMessage";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import PokemonTypeFilter from "@/components/PokemonTypeFilter";
 import PokemonVirtualList from "@/components/PokemonVirtualList";
 import { API_URL } from "@/constants";
 import { useSuspenseQueries } from "@tanstack/react-query";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import type { ApiPokemonType, PokemonView } from "types";
+import type { PokemonTypeView, PokemonView } from "types";
 
 interface PokemonResponse {
   pokemons: PokemonView[];
 }
 
 interface TypesResponse {
-  types: ApiPokemonType[];
+  types: PokemonTypeView[];
 }
 
 const fetchPokemons = async (): Promise<PokemonResponse> => {
@@ -35,25 +36,44 @@ const fetchTypes = async (): Promise<TypesResponse> => {
   return response.json();
 };
 
-const PokemonContent = () => {
-  const results = useSuspenseQueries({
+const PokemonList = () => {
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [pokemonResults, typesResults] = useSuspenseQueries({
     queries: [
       {
         queryKey: ["pokemons"],
-        queryFn: () => fetchPokemons().then((data) => data.pokemons),
+        queryFn: (): Promise<PokemonView[]> =>
+          fetchPokemons().then((data) => data.pokemons),
       },
       {
         queryKey: ["types"],
-        queryFn: () => fetchTypes().then((data) => data.types),
+        queryFn: (): Promise<PokemonTypeView[]> =>
+          fetchTypes().then((data) => data.types),
       },
-    ],
+    ] as const,
   });
 
-  const [pokemonsData, typesData] = results.map((result) => result.data);
+  const toggleType = (typeName: string) =>
+    setSelectedTypes((prevSelected) =>
+      prevSelected.includes(typeName)
+        ? prevSelected.filter((type) => type !== typeName)
+        : [...prevSelected, typeName]
+    );
+
+  const filteredPokemons = pokemonResults.data.filter(
+    (pokemon) =>
+      selectedTypes.length === 0 ||
+      pokemon.types.some((type) => selectedTypes.includes(type))
+  );
 
   return (
     <div>
-      <PokemonVirtualList pokemons={pokemonsData} />
+      <PokemonTypeFilter
+        types={typesResults.data}
+        selectedTypes={selectedTypes}
+        onClick={toggleType}
+      />
+      <PokemonVirtualList pokemons={filteredPokemons} />
     </div>
   );
 };
@@ -62,7 +82,7 @@ const Home = () => {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Suspense fallback={<LoadingSpinner />}>
-        <PokemonContent />
+        <PokemonList />
       </Suspense>
     </ErrorBoundary>
   );
