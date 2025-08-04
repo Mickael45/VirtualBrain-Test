@@ -11,8 +11,9 @@ const PokemonController = Router();
 PokemonController.get("/all", async (_req: Request, res: Response) => {
   try {
     const pokemons = (await getAllPokemons()) as Pokemon[];
+    const pokemonsView = pokemons.map(toPokemonView);
 
-    return res.status(200).send({ pokemons });
+    return res.status(200).send({ pokemons: pokemonsView });
   } catch (error) {
     console.error("Error getting Pokemons:", error);
     return res.status(500).send("Failed to get Pokemons");
