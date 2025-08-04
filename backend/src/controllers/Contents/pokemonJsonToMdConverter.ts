@@ -1,98 +1,120 @@
-import { Ability, Pokemon } from "../../types/Pokemon";
+import { Pokemon, Resistance } from "../../types/Pokemon";
+
+const formatItem = (title: string, value: string | number): string =>
+  `- **${title}**${value ? ": " + value : ""}`;
+
+const addNone = (): string => "- **None**";
+
+const addSection = (title: string, content: string[]): string[] => {
+  const parts = [`## ${title}`];
+
+  parts.push(...content);
+  parts.push("\n---");
+
+  return parts;
+};
+
+const formatBasicInfo = ({
+  pokedexId,
+  id,
+  slug,
+  apiGeneration,
+}: Pokemon): string[] => [
+  formatItem("Pokedex ID", pokedexId),
+  formatItem("Pokemon ID", id),
+  formatItem("Slug", slug),
+  formatItem("Generation", apiGeneration),
+];
+
+const formatStats = ({
+  HP,
+  attack,
+  defense,
+  special_attack,
+  special_defense,
+  speed,
+}: Pokemon["stats"]): string[] => [
+  formatItem("HP", HP),
+  formatItem("Attack", attack),
+  formatItem("Defense", defense),
+  formatItem("Special Attack", special_attack),
+  formatItem("Special Defense", special_defense),
+  formatItem("Speed", speed),
+];
+
+const formatTypes = (types: Pokemon["apiTypes"]): string[] =>
+  types.map((type) => formatItem(type.name, ""));
+
+const formatResistances = (resistances: Resistance[]): string[] =>
+  resistances.length === 0
+    ? [addNone()]
+    : resistances.map(({ name, damage_multiplier, damage_relation }) =>
+        formatItem(name, `${damage_relation} (${damage_multiplier})`)
+      );
+
+const formatResistanceModifyingAbilities = (
+  abilities: Pokemon["resistanceModifyingAbilitiesForApi"]
+): string[] => {
+  const isArray = Array.isArray(abilities);
+
+  if (
+    abilities === null ||
+    abilities === undefined ||
+    (isArray && abilities.length === 0)
+  ) {
+    return [addNone()];
+  }
+
+  return isArray
+    ? abilities.map(({ name, slug }) => formatItem(name, slug))
+    : [formatItem(abilities.name, "")];
+};
+
+const formatEvolutions = (evolutions: Pokemon["apiEvolutions"]): string[] =>
+  evolutions.length === 0
+    ? [addNone()]
+    : evolutions.map(({ name, pokedexId }) =>
+        formatItem(name, `(ID: ${pokedexId})`)
+      );
+
+const formatPreEvolution = (
+  preEvolution: Pokemon["apiPreEvolution"]
+): string[] =>
+  preEvolution === "none"
+    ? [addNone()]
+    : [formatItem(preEvolution.name, `(ID: ${preEvolution.pokedexIdd})`)];
 
 export const pokemonJsonToMd = (data: Pokemon): string => {
   const mdStrings: string[] = [];
 
-  mdStrings.push(`# Pokemon Name: ${data.name}/n`);
+  mdStrings.push(`# Pokemon Name: ${data.name}\n`);
 
-  mdStrings.push(`## Basic Info`);
-  mdStrings.push(`- **Pokedex ID:** ${data.pokedexId}`);
-  mdStrings.push(`- **Name:** ${data.name}`);
+  mdStrings.push(...addSection("Basic Info", formatBasicInfo(data)));
+  mdStrings.push(...addSection("Stats", formatStats(data.stats)));
+  mdStrings.push(...addSection("Types", formatTypes(data.apiTypes)));
   mdStrings.push(
-    `- **Type:** ${data.apiTypes.map((type) => type.name).join(", ")}`
+    ...addSection("Resistances", formatResistances(data.apiResistances))
   );
-  mdStrings.push(`- **Generation:** ${data.apiGeneration}`);
-  mdStrings.push("\n---");
-
-  mdStrings.push(`## Stats`);
-  mdStrings.push(`- **HP:** ${data.stats.HP}`);
-  mdStrings.push(`- **Attack:** ${data.stats.attack}`);
-  mdStrings.push(`- **Defense:** ${data.stats.defense}`);
-  mdStrings.push(`- **Special Attack:** ${data.stats.special_attack}`);
-  mdStrings.push(`- **Special Defense:** ${data.stats.special_defense}`);
-  mdStrings.push(`- **Speed:** ${data.stats.speed}`);
-  mdStrings.push("\n---");
-
-  mdStrings.push("## Types");
-  data.apiTypes.forEach((type) => {
-    mdStrings.push(`- **${type.name}** ![${type.name}])`);
-  });
-  mdStrings.push("\n---");
-
-  mdStrings.push(`## Resistances`);
-  data.apiResistances.length === 0
-    ? ["- **None**"]
-    : data.apiResistances.map(
-        ({ name, damage_multiplier, damage_relation }) =>
-          `- **${name}:** ${damage_relation} (${damage_multiplier})`
-      );
-  mdStrings.push("\n---");
-
-  mdStrings.push(`## Resistance With Abilities`);
-  data.apiResistancesWithAbilities.length === 0
-    ? ["- **None**"]
-    : data.apiResistancesWithAbilities.map(
-        ({ name, damage_multiplier, damage_relation }) =>
-          `- **${name}:** ${damage_relation} (${damage_multiplier})`
-      );
-  mdStrings.push("\n---");
-
-  mdStrings.push(`## Resistance Modifying Abilities`);
-  const isArray = Array.isArray(data.resistanceModifyingAbilitiesForApi);
-
-  if (
-    data.resistanceModifyingAbilitiesForApi === null ||
-    data.resistanceModifyingAbilitiesForApi === undefined ||
-    (isArray &&
-      (data.resistanceModifyingAbilitiesForApi as unknown as Array<Ability>)
-        .length === 0)
-  ) {
-    mdStrings.push("- **None**");
-  } else if (isArray) {
-    (
-      data.resistanceModifyingAbilitiesForApi as unknown as Array<Ability>
-    ).forEach(({ name, slug }) => {
-      mdStrings.push(`- **${name}** (${slug})`);
-    });
-  } else {
-    mdStrings.push(
-      `- **${
-        (data.resistanceModifyingAbilitiesForApi as unknown as Ability).name
-      }** (${
-        (data.resistanceModifyingAbilitiesForApi as unknown as Ability).slug
-      })`
-    );
-  }
-
-  mdStrings.push(`## Pre Evolution`);
-  if (data.apiPreEvolution === "none") {
-    mdStrings.push("- **None**");
-  } else {
-    mdStrings.push(
-      `- **${data.apiPreEvolution.name}** (ID: ${data.apiPreEvolution.pokedexIdd})`
-    );
-  }
-  mdStrings.push("\n---");
-
-  mdStrings.push(`## Evolutions`);
-  if (data.apiEvolutions.length === 0) {
-    mdStrings.push("- **None**");
-  } else {
-    data.apiEvolutions.forEach(({ name, pokedexId }) => {
-      mdStrings.push(`- **${name}** (Pokemon id: ${pokedexId})
-`);
-    });
-  }
+  mdStrings.push(
+    ...addSection(
+      "Resistance With Abilities",
+      formatResistances(data.apiResistancesWithAbilities)
+    )
+  );
+  mdStrings.push(
+    ...addSection(
+      "Resistance Modifying Abilities",
+      formatResistanceModifyingAbilities(
+        data.resistanceModifyingAbilitiesForApi
+      )
+    )
+  );
+  mdStrings.push(
+    ...addSection("Pre Evolution", formatPreEvolution(data.apiPreEvolution))
+  );
+  mdStrings.push(
+    ...addSection("Evolutions", formatEvolutions(data.apiEvolutions))
+  );
 
   return mdStrings.join("\n");
 };
