@@ -63,7 +63,7 @@ const PokemonList = () => {
   const filteredPokemons = pokemonResults.data.filter(
     (pokemon) =>
       selectedTypes.length === 0 ||
-      pokemon.types.some((type) => selectedTypes.includes(type))
+      pokemon.types.some(({ name }) => selectedTypes.includes(name))
   );
 
   return (
