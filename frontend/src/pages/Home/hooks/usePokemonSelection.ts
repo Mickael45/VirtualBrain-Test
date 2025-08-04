@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export const usePokemonSelection = () => {
   const [selectedPokemonsName, setSelectedPokemonsName] = useState<string[]>(
@@ -12,7 +13,7 @@ export const usePokemonSelection = () => {
       }
 
       if (prevSelected.length >= 4) {
-        alert("You can only select up to 4 Pokémon at a time.");
+        toast.error("You can only select up to 4 Pokémon at a time.");
         return prevSelected;
       }
 

@@ -6,8 +6,8 @@ interface HeaderProps {
 }
 
 const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => (
-  <header className="bg-gray-700/40 py-4 mb-4">
-    <div className="w-7xl mx-auto">
+  <header className="bg-gray-700/40 py-4 mb-4 w-full">
+    <div className="max-w-7xl w-full mx-auto">
       <img src={logo} alt="Logo" className="h-12 mx-auto" />
       <div className="flex justify-center mt-4">
         <input
@@ -15,7 +15,7 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => (
           placeholder="Search Pokémon..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 w-full max-w-md"
+          className="px-4 py-2 mx-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 w-full max-w-md"
         />
       </div>
     </div>

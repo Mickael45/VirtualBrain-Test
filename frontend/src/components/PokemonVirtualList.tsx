@@ -26,7 +26,7 @@ const PokemonVirtualList = ({
   });
 
   return (
-    <div ref={parentRef} className="h-9/10 w-full overflow-y-auto">
+    <div ref={parentRef} className="h-full w-full overflow-y-auto">
       <div
         className={`relative max-w-7xl mx-auto h-[${rowVirtualizer.getTotalSize()}px]`}
       >

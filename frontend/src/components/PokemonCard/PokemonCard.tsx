@@ -22,7 +22,7 @@ const PokemonCard = ({ pokemon, isSelected, onClick }: PokemonCardProps) => {
     <div
       className={`p-2 bg-yellow-400 w-70 rounded-xl transform hover:scale-105 transition-transform duration-300 font-sans ${
         isSelected
-          ? "outline-offset-3 outline-dashed outline-2 outline-white"
+          ? "outline-offset-2 outline-dashed outline-2 outline-white"
           : ""
       }`}
       onClick={handleClick}
@@ -30,19 +30,13 @@ const PokemonCard = ({ pokemon, isSelected, onClick }: PokemonCardProps) => {
       <div className={`${cardColor} rounded-md text-white`}>
         <div className="p-2">
           <div className="flex justify-between items-center">
-            <h2
-              className="text-lg flex font-bold capitalize justify-between items-center"
-              style={{
-                fontFamily:
-                  "'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif",
-              }}
-            >
+            <h2 className="text-lg flex font-bold capitalize justify-between items-center">
               {pokemon.evolvesFrom && evolvesFromImage ? (
                 <div className="w-10 h-10 flex items-center mr-1 justify-center bg-gray-100 border-2 border-yellow-500 rounded-full">
                   <img
                     src={evolvesFromImage}
                     alt={pokemon.evolvesFrom.name}
-                    className="w-8 h-8 object-contain rounded-full"
+                    className="w-8 h-8 object-contain"
                     loading="lazy"
                   />
                 </div>
@@ -55,10 +49,10 @@ const PokemonCard = ({ pokemon, isSelected, onClick }: PokemonCardProps) => {
             <div className="flex items-center">
               <span className="text-xs font-bold mr-1">HP</span>
               <span className="text-md font-bold mr-2">{pokemon.stats.HP}</span>
-              <div className="w-7 h-7 flex items-center justify-center ">
+              <div className="w-10 h-10 flex items-center justify-center bg-gray-100 border-2 border-yellow-500 rounded-full">
                 <img
                   src={firstType.image}
-                  className="text-lg"
+                  className="w-8 h-8 object-contain"
                   alt={firstType.name}
                 />
               </div>

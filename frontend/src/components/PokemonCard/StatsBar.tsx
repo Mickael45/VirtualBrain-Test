@@ -14,7 +14,7 @@ function StatBar({ label, value }: StatBarProps) {
         <span className="w-25 text-left">{label}</span>
         <div className="w-full bg-yellow-200/50 rounded-full h-1.5 shadow-inner">
           <div
-            className="bg-gradient-to-r from-blue-200 to-blue-500 h-1.5 rounded-full"
+            className="bg-gradient-to-r from-blue-300 to-blue-500 h-1.5 rounded-full"
             style={{ width: `${barWidth}%` }}
           ></div>
         </div>

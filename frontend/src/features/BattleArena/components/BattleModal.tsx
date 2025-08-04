@@ -1,5 +1,6 @@
+import { usePokemonBattleStream } from "@/features/BattleArena/hooks/usePokemonBattleStream";
 import type { SelectedPokemon } from "@/types/pokemon";
-import { useState, type RefObject } from "react";
+import { useEffect, type RefObject } from "react";
 
 interface BattleModalProps {
   dialogRef: RefObject<HTMLDialogElement | null>;
@@ -12,55 +13,31 @@ const BattleModal = ({
   closeModal,
   selectedPokemons,
 }: BattleModalProps) => {
-  const [streamedResponse, setStreamedResponse] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isStreaming, setIsStreaming] = useState(false);
   const query = `Que se passe-t-il si ${selectedPokemons
     .map((p) => p.name)
     .join(" et ")} se battent ?`;
+  const {
+    streamedResponse,
+    isLoading,
+    isStreaming,
+    setStreamedResponse,
+    handlePromptSubmit,
+  } = usePokemonBattleStream(query);
 
-  const handlePromptSubmit = async () => {
-    setIsLoading(true);
+  const handleClose = () => {
+    closeModal();
     setStreamedResponse("");
-
-    try {
-      const response = await fetch(
-        `https://chatbot-api.getvirtualbrain.com/open-completion/6428676b-ff34-4590-ac90-770999b961eb/query?query=${query}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjE2N2M1ZjE2LWRiZTctNGM4YS05YjUxLWJlZTZkOTQxMDI5ZSIsImVtYWlsIjoibWlja2FlbGdvbWVzY29uc3VsdGluZ0BnbWFpbC5jb20ifSwiaWF0IjoxNzU0MzMyMzE4LCJleHAiOjE3NTQzMzk1MTgsImF1ZCI6ImdldHZpcnR1YWxicmFpbi5jb20iLCJpc3MiOiJWaXJ0dWFsQnJhaW4ifQ.pk1bjdPa1aFF0c0-C_5CbKUHeA6Ah0wD2kB8HPI0FQ8`,
-          },
-        }
-      );
-
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
-
-      if (!response.body) {
-        throw new Error("ReadableStream not yet supported in this browser.");
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      setIsStreaming(true);
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value);
-
-        setStreamedResponse((prev) => prev + chunk);
-      }
-      setIsStreaming(false);
-    } catch (error) {
-      console.error("Streaming failed:", error);
-      setStreamedResponse("Error fetching response.");
-    } finally {
-      setIsLoading(false);
-    }
   };
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+
+    if (dialog) {
+      dialog.addEventListener("close", handleClose);
+
+      return () => dialog.removeEventListener("close", handleClose);
+    }
+  }, [dialogRef, handleClose]);
 
   return (
     <dialog
@@ -69,7 +46,7 @@ const BattleModal = ({
     >
       <div className="px-4 py-4 bg-linear-65 from-red-500 to-blue-500 items-center justify-between flex">
         <h2 className="text-xl font-bold text-white">Pokemon Battle Arena</h2>
-        <button onClick={closeModal} className="text-white">
+        <button onClick={handleClose} className="text-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
@@ -112,7 +89,7 @@ const BattleModal = ({
         </div>
         {streamedResponse ? (
           <textarea
-            className="w-full h-32 p-2 border border-gray-300 rounded transition-all ease-in-out duration-300 overflow-y-auto mt-4 bg-gray-800 text-white"
+            className="w-full h-32 p-2 border border-gray-300 rounded overflow-y-auto mt-4 bg-gray-800 text-white"
             readOnly
             value={streamedResponse}
           />
