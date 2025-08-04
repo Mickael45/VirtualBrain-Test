@@ -2,15 +2,27 @@ import { type Request, type Response, Router } from "express";
 import {
   getAllPokemons,
   getPokemonById,
+  getPokemonTypes,
 } from "../../services/pokemonApiService";
-import { Pokemon } from "types";
-import { toPokemonView } from "./pokemonMapper";
+import { toPokemonTypeView, toPokemonView } from "./pokemonMapper";
 
 const PokemonController = Router();
 
+PokemonController.get("/types", async (_req: Request, res: Response) => {
+  try {
+    const types = await getPokemonTypes();
+    const typesView = types.map(toPokemonTypeView);
+
+    return res.status(200).send({ types: typesView });
+  } catch (error) {
+    console.error("Error getting Pokemon types:", error);
+    return res.status(500).send("Failed to get Pokemon types");
+  }
+});
+
 PokemonController.get("/all", async (_req: Request, res: Response) => {
   try {
-    const pokemons = (await getAllPokemons()) as Pokemon[];
+    const pokemons = await getAllPokemons();
     const pokemonsView = pokemons.map(toPokemonView);
 
     return res.status(200).send({ pokemons: pokemonsView });
@@ -34,7 +46,7 @@ PokemonController.get("/:pokemonId", async (_req: Request, res: Response) => {
   }
 
   try {
-    const pokemon = (await getPokemonById(id)) as Pokemon;
+    const pokemon = await getPokemonById(id);
 
     if (!pokemon) {
       return res.status(404).send("Pokemon not found");
