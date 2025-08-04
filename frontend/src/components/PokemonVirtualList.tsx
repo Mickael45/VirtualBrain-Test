@@ -6,13 +6,18 @@ import { useResponsiveColumns } from "@/hooks/useResponsiveColumns";
 
 interface PokemonVirtualListProps {
   pokemons: PokemonView[];
+  onClick: (pokemonName: string) => void;
+  selectedPokemonsName?: string[] | null;
 }
 
-const PokemonVirtualList = ({ pokemons }: PokemonVirtualListProps) => {
+const PokemonVirtualList = ({
+  pokemons,
+  onClick,
+  selectedPokemonsName,
+}: PokemonVirtualListProps) => {
   const parentRef = useRef(null);
   const itemsPerRow = useResponsiveColumns();
   const rowCount = Math.ceil(pokemons.length / itemsPerRow);
-
   const rowVirtualizer = useVirtualizer({
     count: rowCount,
     getScrollElement: () => parentRef.current,
@@ -40,7 +45,12 @@ const PokemonVirtualList = ({ pokemons }: PokemonVirtualListProps) => {
             >
               <div className="grid one-card:grid-cols-1 two-cards:grid-cols-2 three-cards:grid-cols-3 four-cards:grid-cols-4 justify-items-center p-4">
                 {rowPokemons.map((pokemon) => (
-                  <PokemonCard key={pokemon.id} pokemon={pokemon} />
+                  <PokemonCard
+                    key={pokemon.id}
+                    pokemon={pokemon}
+                    onClick={onClick}
+                    isSelected={selectedPokemonsName?.includes(pokemon.name)}
+                  />
                 ))}
               </div>
             </div>

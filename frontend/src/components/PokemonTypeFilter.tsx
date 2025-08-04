@@ -1,10 +1,9 @@
 import { typeToColorMapper } from "@/utils/typeToColorMapper";
-import type { PokemonTypeView } from "types";
 
 interface PokemonTypeFilterProps {
-  types: PokemonTypeView[];
+  types: string[];
   selectedTypes: string[];
-  onClick: (typeName: string) => void;
+  onClick: (type: string) => void;
 }
 
 const PokemonTypeFilter = ({
@@ -13,15 +12,15 @@ const PokemonTypeFilter = ({
   onClick,
 }: PokemonTypeFilterProps) => (
   <div className="flex flex-wrap max-w-7xl mx-auto justify-center mb-4">
-    {types.map(({ name }) => (
+    {types.map((type) => (
       <button
-        key={name}
-        className={`${typeToColorMapper(name)} ${
-          selectedTypes.includes(name) ? "ring-2 ring-red-500" : ""
+        key={type}
+        className={`${typeToColorMapper(type)} ${
+          selectedTypes.includes(type) ? "ring-3 ring-yellow-400" : ""
         } px-4 py-2 m-1 rounded text-white`}
-        onClick={() => onClick(name)}
+        onClick={() => onClick(type)}
       >
-        {name}
+        {type}
       </button>
     ))}
   </div>

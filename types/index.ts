@@ -65,7 +65,7 @@ export type StatBlockView = Omit<
 
 export type PokemonView = Pick<Pokemon, "id" | "name" | "image"> & {
   stats: StatBlockView;
-  types: string[];
+  types: PokemonType[];
   evolvesFrom: Evolution | null;
 };
 
@@ -76,4 +76,4 @@ export interface ApiPokemonType {
   englishName: string;
 }
 
-export type PokemonTypeView = Omit<ApiPokemonType, "englishName">;
+export type PokemonTypeView = string;

@@ -20,9 +20,6 @@ const toStatBlockView = ({
   speed,
 });
 
-const toTypesView = (types: Pokemon["apiTypes"]): string[] =>
-  types.map(({ name }) => name);
-
 const toEvolutionView = (
   preEvolution: PreEvolution | "none"
 ): Evolution | null =>
@@ -38,12 +35,9 @@ export const toPokemonView = (pokemon: Pokemon): PokemonView => ({
   name: pokemon.name,
   image: pokemon.image,
   stats: toStatBlockView(pokemon.stats),
-  types: toTypesView(pokemon.apiTypes),
+  types: pokemon.apiTypes,
   evolvesFrom: toEvolutionView(pokemon.apiPreEvolution),
 });
 
-export const toPokemonTypeView = (type: ApiPokemonType): PokemonTypeView => ({
-  id: type.id,
-  name: type.name,
-  image: type.image,
-});
+export const toPokemonTypeView = ({ name }: ApiPokemonType): PokemonTypeView =>
+  name;
