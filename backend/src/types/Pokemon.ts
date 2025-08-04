@@ -52,7 +52,7 @@ export interface Pokemon {
   apiTypes: PokemonType[];
   apiGeneration: number;
   apiResistances: Resistance[];
-  resistanceModifyingAbilitiesForApi: Ability;
+  resistanceModifyingAbilitiesForApi: Ability | Ability[];
   apiEvolutions: Evolution[];
   apiPreEvolution: PreEvolution | "none";
   apiResistancesWithAbilities: Resistance[];
