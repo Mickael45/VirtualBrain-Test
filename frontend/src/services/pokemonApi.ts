@@ -10,21 +10,31 @@ interface TypesResponse {
 }
 
 export const fetchPokemons = async (): Promise<PokemonResponse> => {
-  const response = await fetch(`${API_URL}pokemons/all`);
+  try {
+    const response = await fetch(`${API_URL}pokemons/all`);
 
-  if (!response.ok) {
-    throw new Error("Something went wrong while fetching pokemons");
+    if (!response.ok) {
+      throw new Error("Something went wrong while fetching pokemons");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching pokemons:", error);
+    return { pokemons: [] };
   }
-
-  return response.json();
 };
 
 export const fetchTypes = async (): Promise<TypesResponse> => {
-  const response = await fetch(`${API_URL}pokemons/types`);
+  try {
+    const response = await fetch(`${API_URL}pokemons/types`);
 
-  if (!response.ok) {
-    throw new Error("Something went wrong while fetching types");
+    if (!response.ok) {
+      throw new Error("Something went wrong while fetching types");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching types:", error);
+    return { types: [] };
   }
-
-  return response.json();
 };
