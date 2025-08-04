@@ -1,6 +1,9 @@
 import { type Request, type Response, Router } from "express";
-import { getPokemonById } from "../../services/pokemonApiService";
-import { createExportsDir, savePokemonMarkdown } from "./utils";
+import {
+  getAllPokemons,
+  getPokemonById,
+} from "../../services/pokemonApiService";
+import { savePokemonMarkdown } from "./utils";
 import { pokemonJsonToMd } from "./pokemonJsonToMdConverter";
 
 const ContentController = Router();
@@ -11,7 +14,26 @@ const ContentController = Router();
  * @group Contents
  */
 ContentController.get("/all", async (_req: Request, res: Response) => {
-  return res.sendStatus(200);
+  try {
+    const pokemons = await getAllPokemons();
+
+    pokemons
+      .map((pokemon) => ({
+        id: pokemon.id,
+        name: pokemon.name,
+        markdown: pokemonJsonToMd(pokemon),
+      }))
+      .forEach(({ name, id, markdown }) =>
+        savePokemonMarkdown(name, id, markdown)
+      );
+
+    return res.status(200).send({
+      message: `All Pokemon saved successfully`,
+    });
+  } catch (error) {
+    console.error("Error saving Pokemons:", error);
+    return res.status(500).send("Failed to save Pokemons");
+  }
 });
 
 /**
