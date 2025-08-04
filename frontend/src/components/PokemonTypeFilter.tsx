@@ -11,13 +11,13 @@ const PokemonTypeFilter = ({
   selectedTypes,
   onClick,
 }: PokemonTypeFilterProps) => (
-  <div className="flex flex-wrap max-w-7xl mx-auto justify-center mb-4">
+  <div className="flex flex-wrap max-w-7xl w-full mx-auto justify-center mb-4">
     {types.map((type) => (
       <button
         key={type}
         className={`${typeToColorMapper(type)} ${
           selectedTypes.includes(type) ? "ring-3 ring-yellow-400" : ""
-        } px-4 py-2 m-1 rounded text-white`}
+        } px-4 py-2 m-1 w-26 rounded text-white`}
         onClick={() => onClick(type)}
       >
         {type}
