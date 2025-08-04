@@ -1,27 +1,47 @@
 import PokemonVirtualList from "@/components/PokemonVirtualList";
-import { useQuery } from "@tanstack/react-query";
+import { API_URL } from "@/constants";
+import { useQueries } from "@tanstack/react-query";
 import type { PokemonView } from "types";
 
 interface PokemonResponse {
   pokemons: PokemonView[];
 }
 
+const fetchPokemons = async (): Promise<PokemonResponse> => {
+  const response = await fetch(`${API_URL}pokemons/all`);
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
+
 const Home = () => {
-  const { isPending, error, data } = useQuery<PokemonResponse>({
+  const results = useQueries({
+    queries: [
+      {
     queryKey: ["pokemons"],
-    queryFn: () =>
-      fetch("http://localhost:3001/pokemons/all").then((res) => res.json()),
+        queryFn: () => fetchPokemons().then((data) => data.pokemons),
+      },
+    ],
   });
 
-  if (isPending) return "Loading...";
+  if (results.some((query) => query.isLoading)) {
+    return "Loading...";
+  }
 
-  if (error) return "An error has occurred: " + error.message;
+  if (results.some((query) => query.isError)) {
+    return <div>An error occurred while fetching the pokemons data.</div>;
+  }
 
-  if (!data || !data.pokemons) return "No Pokémon data found";
+  const [pokemonsResult] = results;
+
+  if (!pokemonsResult || !pokemonsResult.data) {
+    return <div>No pokemons found.</div>;
+  }
 
   return (
     <div>
-      <PokemonVirtualList pokemons={data.pokemons} />
+      <PokemonVirtualList pokemons={pokemonsResult.data} />
     </div>
   );
 };
