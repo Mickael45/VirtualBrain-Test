@@ -57,3 +57,16 @@ export interface Pokemon {
   apiPreEvolution: PreEvolution | "none";
   apiResistancesWithAbilities: Resistance[];
 }
+
+export type StatBlockView = Omit<
+  StatBlock,
+  "special_attack" | "special_defense"
+>;
+
+export type PokemonTypeView = Omit<PokemonType, "image" | "slug">;
+
+export type PokemonView = Pick<Pokemon, "id" | "name" | "image"> & {
+  stats: StatBlockView;
+  types: PokemonTypeView[];
+  evolvesFrom: Evolution | null;
+};
