@@ -20,3 +20,21 @@ export const createExportsDir = async (): Promise<string | undefined> => {
     console.error("Error creating exports directory:", error);
   }
 };
+
+export const savePokemonMarkdown = async (
+  pokemonName: string,
+  pokemonId: number,
+  pokemonMarkdown: string,
+  exportsDir: string
+) => {
+  try {
+    const filePath = path.join(
+      exportsDir,
+      `(${pokemonId}) - ${pokemonName}.md`
+    );
+
+    await fs.writeFile(filePath, pokemonMarkdown, "utf8");
+  } catch (error) {
+    console.error("Error saving Pokemon markdown:", error);
+  }
+};

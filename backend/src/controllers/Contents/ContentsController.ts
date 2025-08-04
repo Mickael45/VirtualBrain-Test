@@ -1,6 +1,7 @@
 import { type Request, type Response, Router } from "express";
 import { getPokemonById } from "../../services/pokemonApiService";
-import { createExportsDir } from "./utils";
+import { createExportsDir, savePokemonMarkdown } from "./utils";
+import { pokemonJsonToMd } from "./pokemonJsonToMdConverter";
 
 const ContentController = Router();
 
@@ -35,9 +36,21 @@ ContentController.get("/:pokemonId", async (_req: Request, res: Response) => {
   try {
     const pokemon = await getPokemonById(Number(pokemonId));
     const exportDirectory = await createExportsDir();
+
+    if (!exportDirectory) {
+      return res.status(500).send("Failed to create export directory");
+    }
+
+    const pokemonMarkdown = pokemonJsonToMd(pokemon);
+    const { name, pokedexId } = pokemon;
+
+    savePokemonMarkdown(name, pokedexId, pokemonMarkdown, exportDirectory);
+    return res.status(200).send({
+      message: `Pokemon ${name} saved successfully`,
+    });
   } catch (error) {
-    console.error("Error fetching Pokemon:", error);
-    return res.status(500).send("Failed to fetch Pokemon");
+    console.error("Error saving Pokemon:", error);
+    return res.status(500).send("Failed to save Pokemon");
   }
 });
 
