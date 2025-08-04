@@ -14,8 +14,8 @@ PokemonController.get("/all", async (_req: Request, res: Response) => {
 
     return res.status(200).send({ pokemons });
   } catch (error) {
-    console.error("Error saving Pokemons:", error);
-    return res.status(500).send("Failed to save Pokemons");
+    console.error("Error getting Pokemons:", error);
+    return res.status(500).send("Failed to get Pokemons");
   }
 });
 
