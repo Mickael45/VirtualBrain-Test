@@ -1,48 +1,73 @@
+import LoadingSpinner from "@/components/LoadingSpinner";
 import PokemonVirtualList from "@/components/PokemonVirtualList";
 import { API_URL } from "@/constants";
-import { useQueries } from "@tanstack/react-query";
-import type { PokemonView } from "types";
+import { useSuspenseQueries } from "@tanstack/react-query";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import type { ApiPokemonType, PokemonView } from "types";
 
 interface PokemonResponse {
   pokemons: PokemonView[];
 }
 
+interface TypesResponse {
+  types: ApiPokemonType[];
+}
+
 const fetchPokemons = async (): Promise<PokemonResponse> => {
   const response = await fetch(`${API_URL}pokemons/all`);
+
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new Error("Something went wrong while fetching pokemons");
   }
+
   return response.json();
 };
 
-const Home = () => {
-  const results = useQueries({
+const fetchTypes = async (): Promise<TypesResponse> => {
+  const response = await fetch(`${API_URL}pokemons/types`);
+
+  if (!response.ok) {
+    throw new Error("Something went wrong while fetching types");
+  }
+
+  return response.json();
+};
+
+const PokemonContent = () => {
+  const results = useSuspenseQueries({
     queries: [
       {
-    queryKey: ["pokemons"],
+        queryKey: ["pokemons"],
         queryFn: () => fetchPokemons().then((data) => data.pokemons),
+      },
+      {
+        queryKey: ["types"],
+        queryFn: () => fetchTypes().then((data) => data.types),
       },
     ],
   });
 
-  if (results.some((query) => query.isLoading)) {
-    return "Loading...";
-  }
-
-  if (results.some((query) => query.isError)) {
-    return <div>An error occurred while fetching the pokemons data.</div>;
-  }
-
-  const [pokemonsResult] = results;
-
-  if (!pokemonsResult || !pokemonsResult.data) {
-    return <div>No pokemons found.</div>;
-  }
+  const [pokemonsData, typesData] = results.map((result) => result.data);
 
   return (
     <div>
-      <PokemonVirtualList pokemons={pokemonsResult.data} />
+      <PokemonVirtualList pokemons={pokemonsData} />
     </div>
+  );
+};
+
+const ErrorFallback = ({ error }: { error: Error }) => (
+  <div>An error occurred while fetching the pokemons data: {error.message}</div>
+);
+
+const Home = () => {
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Suspense fallback={<LoadingSpinner />}>
+        <PokemonContent />
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 
