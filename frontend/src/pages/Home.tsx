@@ -1,3 +1,4 @@
+import ErrorFallback from "@/components/ErrorMessage";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import PokemonVirtualList from "@/components/PokemonVirtualList";
 import { API_URL } from "@/constants";
@@ -56,10 +57,6 @@ const PokemonContent = () => {
     </div>
   );
 };
-
-const ErrorFallback = ({ error }: { error: Error }) => (
-  <div>An error occurred while fetching the pokemons data: {error.message}</div>
-);
 
 const Home = () => {
   return (
