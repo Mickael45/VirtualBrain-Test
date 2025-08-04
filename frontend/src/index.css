@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@theme {
+  --breakpoint-one-card: 15rem;
+  --breakpoint-two-cards: 43rem;
+  --breakpoint-three-cards: 61rem;
+  --breakpoint-four-cards: 78rem;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
