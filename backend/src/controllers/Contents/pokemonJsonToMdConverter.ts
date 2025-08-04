@@ -1,4 +1,4 @@
-import { Pokemon, Resistance } from "../../types/Pokemon";
+import { Pokemon, Resistance } from "types";
 
 const formatItem = (title: string, value: string | number): string =>
   `- **${title}**${value ? ": " + value : ""}`;

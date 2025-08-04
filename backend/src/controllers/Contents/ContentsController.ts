@@ -56,7 +56,7 @@ ContentController.get("/:pokemonId", async (_req: Request, res: Response) => {
   }
 
   try {
-    const pokemon = await getPokemonById(Number(pokemonId));
+    const pokemon = await getPokemonById(id);
     const pokemonMarkdown = pokemonJsonToMd(pokemon);
     const { name, pokedexId } = pokemon;
 

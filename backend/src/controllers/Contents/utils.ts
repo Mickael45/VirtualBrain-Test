@@ -3,7 +3,7 @@ import path from "path";
 
 const createExportsDir = async (): Promise<string | undefined> => {
   try {
-    const exportDirectoryPath = path.join(__dirname, "..", "exports");
+    const exportDirectoryPath = path.join(process.cwd(), "exports");
     const exportFolderExists = await fs
       .access(exportDirectoryPath)
       .then(() => true)

@@ -2,7 +2,7 @@ import cors from "cors";
 import express from "express";
 
 import { createServer } from "http";
-import { PokemonController } from "./controllers/PokemonController";
+import { PokemonController } from "./controllers/Pokemon/PokemonController";
 import { ContentController } from "./controllers/Contents/ContentsController";
 
 /** App */
