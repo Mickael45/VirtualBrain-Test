@@ -38,6 +38,9 @@ const fetchTypes = async (): Promise<TypesResponse> => {
 
 const PokemonList = () => {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedPokemonsName, setSelectedPokemonsName] = useState<string[]>(
+    []
+  );
   const [pokemonResults, typesResults] = useSuspenseQueries({
     queries: [
       {
@@ -59,6 +62,12 @@ const PokemonList = () => {
         ? prevSelected.filter((type) => type !== typeName)
         : [...prevSelected, typeName]
     );
+  const togglePokemon = (pokemonName: string) =>
+    setSelectedPokemonsName((prevSelected) =>
+      prevSelected?.includes(pokemonName)
+        ? prevSelected.filter((name) => name !== pokemonName)
+        : [...prevSelected, pokemonName]
+    );
 
   const filteredPokemons = pokemonResults.data.filter(
     (pokemon) =>
@@ -73,7 +82,11 @@ const PokemonList = () => {
         selectedTypes={selectedTypes}
         onClick={toggleType}
       />
-      <PokemonVirtualList pokemons={filteredPokemons} />
+      <PokemonVirtualList
+        pokemons={filteredPokemons}
+        onClick={togglePokemon}
+        selectedPokemonsName={selectedPokemonsName}
+      />
     </div>
   );
 };
