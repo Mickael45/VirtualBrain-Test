@@ -15,7 +15,7 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => (
           placeholder="Search Pokémon..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 w-full max-w-md"
+          className="px-4 py-2 mx-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 w-full max-w-md"
         />
       </div>
     </div>
