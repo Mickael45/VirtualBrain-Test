@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Home from "@/pages/Home";
+import Home from "@/pages/Home/Home";
 import "./App.css";
 
 const ONE_HOUR_IN_MS = 1000 * 60 * 60;

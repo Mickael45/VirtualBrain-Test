@@ -1,9 +1,9 @@
+import type { SelectedPokemon } from "@/types/pokemon";
 import { useState, type RefObject } from "react";
-import type { PokemonView } from "types";
 
 interface BattleModalProps {
   dialogRef: RefObject<HTMLDialogElement | null>;
-  selectedPokemons: Pick<PokemonView, "name" | "image">[];
+  selectedPokemons: SelectedPokemon[];
   closeModal: () => void;
 }
 
