@@ -1,6 +1,6 @@
 import axios from "axios";
 import { POKEMON_API_URL } from "../constants";
-import { Pokemon, PokemonType } from "../controllers/PokemonController";
+import { Pokemon, PokemonType } from "../types/Pokemon";
 
 export const getPokemonById = async (id: number): Promise<Pokemon> => {
   try {
