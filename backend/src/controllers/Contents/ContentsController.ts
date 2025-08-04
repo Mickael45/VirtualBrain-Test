@@ -1,5 +1,6 @@
 import { type Request, type Response, Router } from "express";
 import { getPokemonById } from "../../services/pokemonApiService";
+import { createExportsDir } from "./utils";
 
 const ContentController = Router();
 
@@ -33,10 +34,7 @@ ContentController.get("/:pokemonId", async (_req: Request, res: Response) => {
 
   try {
     const pokemon = await getPokemonById(Number(pokemonId));
-
-    return res.send({
-      pokemon,
-    });
+    const exportDirectory = await createExportsDir();
   } catch (error) {
     console.error("Error fetching Pokemon:", error);
     return res.status(500).send("Failed to fetch Pokemon");
