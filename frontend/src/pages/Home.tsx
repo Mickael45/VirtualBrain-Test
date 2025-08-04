@@ -1,10 +1,12 @@
+import BattleModal from "@/components/BattleModal";
 import ErrorFallback from "@/components/ErrorMessage";
+import Footer from "@/components/Footer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import PokemonTypeFilter from "@/components/PokemonTypeFilter";
 import PokemonVirtualList from "@/components/PokemonVirtualList";
 import { API_URL } from "@/constants";
 import { useSuspenseQueries } from "@tanstack/react-query";
-import { Suspense, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import type { PokemonTypeView, PokemonView } from "types";
 
@@ -37,6 +39,7 @@ const fetchTypes = async (): Promise<TypesResponse> => {
 };
 
 const PokemonList = () => {
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedPokemonsName, setSelectedPokemonsName] = useState<string[]>(
     []
@@ -62,18 +65,47 @@ const PokemonList = () => {
         ? prevSelected.filter((type) => type !== typeName)
         : [...prevSelected, typeName]
     );
-  const togglePokemon = (pokemonName: string) =>
-    setSelectedPokemonsName((prevSelected) =>
-      prevSelected?.includes(pokemonName)
-        ? prevSelected.filter((name) => name !== pokemonName)
-        : [...prevSelected, pokemonName]
-    );
+  const togglePokemon = (pokemonName: string) => {
+    setSelectedPokemonsName((prevSelected) => {
+      if (prevSelected.includes(pokemonName)) {
+        return prevSelected.filter((name) => name !== pokemonName);
+      }
+
+      if (prevSelected.length >= 4) {
+        alert("You can only select up to 4 Pokémon at a time.");
+        return prevSelected;
+      }
+
+      return [...prevSelected, pokemonName];
+    });
+  };
+
+  const closeModal = () => {
+    if (dialogRef.current) {
+      dialogRef.current.close();
+    }
+  };
+
+  const openModal = () => {
+    if (dialogRef.current) {
+      dialogRef.current.showModal();
+    }
+  };
+
+  const unSelectAllPokemons = () => setSelectedPokemonsName([]);
 
   const filteredPokemons = pokemonResults.data.filter(
     (pokemon) =>
       selectedTypes.length === 0 ||
       pokemon.types.some(({ name }) => selectedTypes.includes(name))
   );
+
+  const selectedPokemonsWithImages = pokemonResults.data
+    .filter((pokemon) => selectedPokemonsName.includes(pokemon.name))
+    .map((pokemon) => ({
+      name: pokemon.name,
+      image: pokemon.image,
+    }));
 
   return (
     <div>
@@ -86,6 +118,18 @@ const PokemonList = () => {
         pokemons={filteredPokemons}
         onClick={togglePokemon}
         selectedPokemonsName={selectedPokemonsName}
+      />
+      {selectedPokemonsName.length > 0 && (
+        <Footer
+          selectedPokemons={selectedPokemonsWithImages}
+          openBattleModal={openModal}
+          unSelectAllPokemons={unSelectAllPokemons}
+        />
+      )}
+      <BattleModal
+        dialogRef={dialogRef}
+        closeModal={closeModal}
+        selectedPokemons={selectedPokemonsWithImages}
       />
     </div>
   );
