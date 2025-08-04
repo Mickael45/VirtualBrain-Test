@@ -1,4 +1,4 @@
-import { getPokemonBattleStream } from "@/services/chatbotApi";
+import { getPokemonBattleStream } from "@/pages/Home/services/chatbotApi";
 import { useState } from "react";
 
 export const usePokemonBattleStream = (query: string) => {
@@ -9,11 +9,11 @@ export const usePokemonBattleStream = (query: string) => {
   const handlePromptSubmit = async () => {
     setIsLoading(true);
     setStreamedResponse("");
+
     const { reader, decoder } = await getPokemonBattleStream(query);
 
     if (!reader || !decoder) {
       setStreamedResponse("Error fetching response.");
-      setIsLoading(false);
 
       return;
     }
@@ -39,5 +39,11 @@ export const usePokemonBattleStream = (query: string) => {
       setIsLoading(false);
     }
   };
-  return { streamedResponse, isLoading, isStreaming, handlePromptSubmit };
+  return {
+    streamedResponse,
+    isLoading,
+    isStreaming,
+    setStreamedResponse,
+    handlePromptSubmit,
+  };
 };

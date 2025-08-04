@@ -16,8 +16,10 @@ const PokemonTypeFilter = ({
       <button
         key={type}
         className={`${typeToColorMapper(type)} ${
-          selectedTypes.includes(type) ? "ring-3 ring-yellow-400" : ""
-        } px-4 py-2 m-1 w-26 rounded text-white`}
+          selectedTypes.includes(type)
+            ? "outline-2 outline-offset-1 outline-dashed outline-white"
+            : ""
+        } px-4 py-2 m-2 w-26 rounded text-white`}
         onClick={() => onClick(type)}
       >
         {type}

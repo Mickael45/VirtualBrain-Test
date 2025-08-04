@@ -1,5 +1,5 @@
 import { useSuspenseQueries } from "@tanstack/react-query";
-import { fetchPokemons, fetchTypes } from "@/services/pokemonApi";
+import { fetchPokemons, fetchTypes } from "@/pages/Home/services/pokemonApi";
 import type { PokemonTypeView, PokemonView } from "types";
 
 export const usePokemonData = () => {

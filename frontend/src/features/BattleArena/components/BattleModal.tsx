@@ -1,6 +1,6 @@
-import { usePokemonBattleStream } from "@/pages/Home/hooks/usePokemonBattleStream";
+import { usePokemonBattleStream } from "@/features/BattleArena/hooks/usePokemonBattleStream";
 import type { SelectedPokemon } from "@/types/pokemon";
-import { type RefObject } from "react";
+import { useEffect, type RefObject } from "react";
 
 interface BattleModalProps {
   dialogRef: RefObject<HTMLDialogElement | null>;
@@ -16,8 +16,28 @@ const BattleModal = ({
   const query = `Que se passe-t-il si ${selectedPokemons
     .map((p) => p.name)
     .join(" et ")} se battent ?`;
-  const { streamedResponse, isLoading, isStreaming, handlePromptSubmit } =
-    usePokemonBattleStream(query);
+  const {
+    streamedResponse,
+    isLoading,
+    isStreaming,
+    setStreamedResponse,
+    handlePromptSubmit,
+  } = usePokemonBattleStream(query);
+
+  const handleClose = () => {
+    closeModal();
+    setStreamedResponse("");
+  };
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+
+    if (dialog) {
+      dialog.addEventListener("close", handleClose);
+
+      return () => dialog.removeEventListener("close", handleClose);
+    }
+  }, [dialogRef, handleClose]);
 
   return (
     <dialog
@@ -26,7 +46,7 @@ const BattleModal = ({
     >
       <div className="px-4 py-4 bg-linear-65 from-red-500 to-blue-500 items-center justify-between flex">
         <h2 className="text-xl font-bold text-white">Pokemon Battle Arena</h2>
-        <button onClick={closeModal} className="text-white">
+        <button onClick={handleClose} className="text-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"

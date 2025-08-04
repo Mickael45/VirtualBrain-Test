@@ -22,7 +22,7 @@ const PokemonCard = ({ pokemon, isSelected, onClick }: PokemonCardProps) => {
     <div
       className={`p-2 bg-yellow-400 w-70 rounded-xl transform hover:scale-105 transition-transform duration-300 font-sans ${
         isSelected
-          ? "outline-offset-3 outline-dashed outline-2 outline-white"
+          ? "outline-offset-2 outline-dashed outline-2 outline-white"
           : ""
       }`}
       onClick={handleClick}
