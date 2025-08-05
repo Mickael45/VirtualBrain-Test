@@ -1,7 +1,6 @@
 import { typeToColorMapper } from "@/pages/Home/utils/typeToColorMapper";
 import type { PokemonView } from "types";
 import StatBar from "./StatsBar";
-import { POKEMON_IMAGE_URL } from "@/constants";
 
 interface PokemonCardProps {
   pokemon: PokemonView;
@@ -13,7 +12,9 @@ const PokemonCard = ({ pokemon, isSelected, onClick }: PokemonCardProps) => {
   const firstType = pokemon.types[0];
   const cardColor = typeToColorMapper(firstType.name);
   const evolvesFromImage = pokemon.evolvesFrom
-    ? `${POKEMON_IMAGE_URL}${pokemon.evolvesFrom.pokedexId}.png`
+    ? `${import.meta.env.VITE_POKEMON_IMAGE_URL}${
+        pokemon.evolvesFrom.pokedexId
+      }.png`
     : null;
 
   const handleClick = () => onClick(pokemon.name);

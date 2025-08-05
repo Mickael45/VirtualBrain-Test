@@ -12,7 +12,7 @@ interface TypesResponse {
 
 export const fetchPokemons = async (): Promise<PokemonResponse> => {
   try {
-    const response = await fetch(`${API_URL}pokemons/all`);
+    const response = await fetch(`${import.meta.env.VITE_API_URL}pokemons/all`);
 
     if (!response.ok) {
       throw new Error("Something went wrong while fetching pokemons");
@@ -37,7 +37,9 @@ export const fetchPokemons = async (): Promise<PokemonResponse> => {
 
 export const fetchTypes = async (): Promise<TypesResponse> => {
   try {
-    const response = await fetch(`${API_URL}pokemons/types`);
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}pokemons/types`
+    );
 
     if (!response.ok) {
       throw new Error("Something went wrong while fetching types");

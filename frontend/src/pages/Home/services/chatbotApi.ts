@@ -9,13 +9,16 @@ export const getPokemonBattleStream = async (
   query: string
 ): Promise<BattleStreamResponse> => {
   try {
-    const response = await fetch(`${CHAT_BOT_URL}query?query=${query}`, {
+    const response = await fetch(
+      `${import.meta.env.VITE_CHAT_BOT_URL}query?query=${query}`,
+      {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${CHAT_BOT_TOKEN}`,
+          Authorization: `Bearer ${import.meta.env.VITE_CHAT_BOT_TOKEN}`,
       },
-    });
+      }
+    );
 
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 

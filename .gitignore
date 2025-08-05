@@ -27,7 +27,6 @@ node_modules
 .cursorrules
 
 # Env
-.env
 .env.scripts
 
 # Docker
