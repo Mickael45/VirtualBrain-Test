@@ -20,7 +20,7 @@ But it didn't change anything.
 
 What I ended up doing was converting all the files to PDF as a workaround.
 
-To save you time, in case you experience the same issue, the conversion time all the converted pdf files are available in `backend/exports/pdf`
+To save you the conversion time, in case you experience the same issue while trying to feed you own brain,  all the converted pdf files are available in `backend/exports/pdf`
 
 ## Tooling
 
