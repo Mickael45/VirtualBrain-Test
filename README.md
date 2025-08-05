@@ -1,5 +1,27 @@
 ![Logo](frontend/src/assets/logo.webp)
 
+# Important Note !
+
+The `.md` file import into the brain fails with the following message:
+
+```
+{
+    "name": "invalid-file-type",
+    "message": "Invalid file type or file content does not match extension."
+}
+```
+
+I tried:
+- Changing the file extension to `.markdown`
+- Sending an empty .md file to make sure the content wasn't an issue
+- Changing the file name
+
+But it didn't change anything.
+
+What I ended up doing was converting all the files to PDF as a workaround.
+
+To save you time, in case you experience the same issue, the conversion time all the converted pdf files are available in `backend/exports/pdf`
+
 ## Tooling
 
 ### Backend
@@ -35,7 +57,7 @@
 
 3.  **Install frontend dependencies:**
    
-    First update the CHAT_BOT_TOKEN constant in the `./frontend/src/constants.ts` file.
+    First update the VITE_CHAT_BOT_TOKEN and VITE_CHAT_BOT_URL constant in the `./frontend/.env` file.
     Then run the following commands.
 
     ```bash
