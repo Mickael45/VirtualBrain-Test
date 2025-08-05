@@ -56,8 +56,10 @@ To save you time, in case you experience the same issue, the conversion time all
     ```
 
 3.  **Install frontend dependencies:**
-   
-    First update the VITE_CHAT_BOT_TOKEN and VITE_CHAT_BOT_URL constant in the `./frontend/.env` file.
+
+    First provide the VITE_CHAT_BOT_TOKEN and VITE_CHAT_BOT_URL environment variables in the `./frontend/.env` file.
+    _I left my VITE_CHAT_BOT_URL in case you want to use it and assuming you have access to a new token for it._
+    
     Then run the following commands.
 
     ```bash
