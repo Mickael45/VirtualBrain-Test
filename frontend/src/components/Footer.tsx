@@ -20,7 +20,7 @@ const PokemonPlaceholder = ({
       <img src={image} alt={name} className="w-9 h-9" />
     </div>
     <span className="grid grid-cols-1 text-left font-semibold">
-      <span className="text-sm">Fighter {index}</span>
+      <span className="text-sm">Combattant {index}</span>
       <span className="text-xs">{name}</span>
     </span>
   </div>
@@ -68,7 +68,7 @@ const Footer = ({
             disabled={selectedPokemons.length < 2}
             onClick={openBattleModal}
           >
-            Start Battle
+            Démarrer le combat !
           </button>
         </div>
       </span>

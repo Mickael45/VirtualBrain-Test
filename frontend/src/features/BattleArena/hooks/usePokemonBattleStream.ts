@@ -13,7 +13,7 @@ export const usePokemonBattleStream = (query: string) => {
     const { reader, decoder } = await getPokemonBattleStream(query);
 
     if (!reader || !decoder) {
-      setStreamedResponse("Error fetching response.");
+      setStreamedResponse("Erreur lors de la récupération de la réponse.");
 
       return;
     }
@@ -34,7 +34,7 @@ export const usePokemonBattleStream = (query: string) => {
       setIsStreaming(false);
     } catch (error) {
       console.error("Streaming failed:", error);
-      setStreamedResponse("Error fetching response.");
+      setStreamedResponse("Erreur lors de la récupération de la réponse.");
     } finally {
       setIsLoading(false);
     }

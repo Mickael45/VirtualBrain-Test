@@ -13,7 +13,7 @@ export const usePokemonSelection = () => {
       }
 
       if (prevSelected.length >= 4) {
-        toast.error("You can only select up to 4 Pokémon at a time.");
+        toast.error("Vous ne pouvez sélectionner que 4 Pokémon à la fois.");
         return prevSelected;
       }
 

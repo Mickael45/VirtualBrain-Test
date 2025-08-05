@@ -1,4 +1,3 @@
-import { API_URL } from "@/constants";
 import type { PokemonTypeView, PokemonView } from "types";
 import { isPokemonView } from "./schema";
 
@@ -15,7 +14,9 @@ export const fetchPokemons = async (): Promise<PokemonResponse> => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}pokemons/all`);
 
     if (!response.ok) {
-      throw new Error("Something went wrong while fetching pokemons");
+      throw new Error(
+        "Une erreur s'est produite lors de la récupération des pokémons"
+      );
     }
 
     const data = await response.json();
@@ -25,12 +26,12 @@ export const fetchPokemons = async (): Promise<PokemonResponse> => {
       !Array.isArray(data.pokemons) ||
       !data.pokemons.every(isPokemonView)
     ) {
-      throw new Error("Invalid response format for pokemons");
+      throw new Error("Format de réponse invalide pour les pokémons");
     }
 
     return data;
   } catch (error) {
-    console.error("Error fetching pokemons:", error);
+    console.error("Erreur lors de la récupération des pokémons:", error);
     return { pokemons: [] };
   }
 };
@@ -42,7 +43,9 @@ export const fetchTypes = async (): Promise<TypesResponse> => {
     );
 
     if (!response.ok) {
-      throw new Error("Something went wrong while fetching types");
+      throw new Error(
+        "Une erreur s'est produite lors de la récupération des types"
+      );
     }
 
     const data = await response.json();
@@ -52,12 +55,12 @@ export const fetchTypes = async (): Promise<TypesResponse> => {
       !Array.isArray(data.types) ||
       !data.types.every((type: unknown) => typeof type === "string")
     ) {
-      throw new Error("Invalid response format for types");
+      throw new Error("Format de réponse invalide pour les types");
     }
 
     return data;
   } catch (error) {
-    console.error("Error fetching types:", error);
+    console.error("Erreur lors de la récupération des types:", error);
     return { types: [] };
   }
 };

@@ -81,10 +81,10 @@ const BattleModal = ({
             className="bg-linear-65 from-red-500 to-blue-500 text-white font-bold py-2 px-5 rounded-lg focus:outline-none disabled:opacity-50"
           >
             {isLoading || isStreaming
-              ? "Battle in Progress..."
+              ? "Combat en cours..."
               : streamedResponse !== ""
-              ? "Restart Battle !"
-              : "Start Battle !"}
+              ? "Redémarrer le combat !"
+              : "Démarrer le combat !"}
           </button>
         </div>
         {streamedResponse ? (
